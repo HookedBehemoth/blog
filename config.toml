@@ -1,0 +1,13 @@
+base_url = "https://boxcat.site"
+compile_sass = true
+build_search_index = false
+minify_html = true
+generate_feed = true
+hard_link_static = false
+
+[markdown]
+highlight_code = true
+render_emoji = true
+smart_punctuation = true
+
+[extra]

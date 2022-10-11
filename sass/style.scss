@@ -1,0 +1,98 @@
+@import "_variables";
+
+body {
+    background: var(--bg_color);
+    color: var(--fg_color);
+    font-family: $font_0, $font_1, $font_2, $font_3;
+    font-size: 18px;
+    margin: 0;
+}
+
+main {
+    background-color: var(--bg_panel);
+    padding: 20px;
+    line-height: 1.4;
+    max-width: $page-width;
+    margin: 1em auto;
+    border-radius: 20px;
+    box-shadow: 0 0 1em rgba(0, 0, 0, 0.2);
+}
+
+.subtitle {
+    font-weight: 100;
+    color: var(--fg_faded);
+}
+
+table {
+    border: var(--fg_faded);
+    border-style: solid;
+    border-width: 2px;
+    border-radius: 1em;
+    width: 100%;
+    padding: 0.5em;
+}
+
+pre {
+    border: 1px solid var(--accent);
+    border-radius: 4px;
+    padding: 0.5em 1em;
+    font-size: 1.1em;
+    max-width: 100%;
+    overflow-x: auto;
+}
+
+p code {
+    background-color: #333;
+}
+
+p {
+    font-size: 1em;
+}
+
+a {
+    color: var(--accent);
+    text-decoration: none;
+
+    &:hover,
+    &:focus {
+        text-decoration: underline;
+    }
+}
+
+h1,
+h2,
+h3,
+h4 {
+    a {
+        margin-right: 10px;
+    }
+}
+
+.toc {
+    font-size: 0.8em;
+}
+
+.sidenote {
+	display: flex;
+	overflow: hidden;
+    line-height: 1.2em;
+    color: var(--accent);
+
+    img {
+        align-self: flex-start;
+        flex-basis: 48px;
+        width: 48px;
+        height: 48px;
+        margin: 0.2rem 0.4rem;
+        flex-shrink: 0;
+    }
+    div {
+        background-color: #333;
+        border-radius: 12px;
+        border:1px solid var(--accent);
+        font-size: 1em;
+        align-self: flex-start;
+        padding: 0.4rem 0.8rem;
+        overflow: hidden;
+    }
+}
