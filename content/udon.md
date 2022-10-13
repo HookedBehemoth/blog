@@ -242,19 +242,49 @@ I published all the glue code as a library in November 2021 [here](https://githu
 At the end of December, I got messaged by Kitlith, who found the repository and was interested in speeding up Udon overall.
 He started recreating the VM in C# but could only get ~80% of the speed of the original code.
 
-(Explain the il2cpp modding/boxing-unboxing barrier?)
+Through [Advent of Code](https://adventofcode.com/), I had recently learned Rust which I used to write an [interpreter](https://github.com/kitlith/vrc_udon_shit/blob/target-codegen/native/src/vm/interpreter.rs). Without any special optimization, it immediately surpassed the original VM by 5-15%. In one particular benchmark, (after applying some minor optimizations) it was 30% faster.
 
-Through [Advent of Code](https://adventofcode.com/), I had recently learned Rust which I used to write an [interpreter](https://github.com/kitlith/vrc_udon_shit/blob/target-codegen/native/src/vm/interpreter.rs). Without any special optimization, it immediately surpassed the original VM by 5-15%.
+> Hey, I'm Kitlith. My original goal with C# was to emit .net bytecode and let the JIT built into .NET optimize it for us.
+> I dove into the guts of mod<->game interaction to gain as much performance as possible, and was in the middle of
+> reimplementing the UdonHeap when I got blindsided by
+> Behemoth's rust interpreter executing the benchmark we were using *faster* than just the time spent by my C# interpreter
+> calling Udon EXTERNs. On the one hand, I was relieved, as that was a pile of hacks that was not going to be trivial to
+> maintain, and I liked rust anyway. On the other, there was now a new codebase that it took some time to get up to speed with.
+>
+> The original C# code is still around, kept in the [original branch](https://github.com/kitlith/vrc_udon_shit/tree/master)
+> if you're interested in it, but it's not very useful.
 
 ### JIT
 A Just-in-Time compiler describes a runtime element that compiles code at runtime. Such compilers are found in most scripting languages, such as JavaScript, Ruby or Lua, and bytecode VMs like the JVM or mono.
 
-The next attempt to write such a JIT compiler that converts UDON assembly into x86_64 machine code.
+The next attempt was to write a JIT compiler that converts UDON assembly into x86_64 machine code.
 
+> I wrote some code that took udon instructions as input, and did its best to combine them into smaller primitives.
+> Behemoth took the output, and wrote code to emit x86_64 instructions.
+> For example, if a program pushes 4 arguments, then immediately calls an extern that takes 4 arguments, then in theory we could emit
+> a buffer that just contains all the arguments and pass that directly to the extern without bothering with pushing/popping the stack.
+> We never got around to doing anything in the JIT besides immediately pushing all the arguments before calling the function, but the
+> framework was there.
+>
+> All in all, it wasn't very complicated. No register allocation, very little optimization. There were some ideas on how to complicate it
+> once we had control over the UdonHeap, but we weren't there yet.
+>
+> After writing the JIT, we measured its performance to be roughly the same as the interpreter, or slightly slower due to on-the-fly emitting.
+> I wrote some code to emit as many blocks ahead of time as we reasonably could, and Behemoth extended that work so that blocks would directly
+> jump between each other where possible. Measure the performance again and... it's measurably faster than the interpreter, but only by a little bit.
+>
+> At that point, I did some profiling. It turns out barely any time was being spent in any of the rust code we wrote, either the interpreter
+> or the JIT. Most of the time was being spent calling out to udon EXTERNs, or dealing with the existing udon heap. There's only so much
+> we could do by only optimizing the core of the interpreter, if we wanted to get even faster, we were going to need to optimize everything else too.
+> This is where our steam ran out. I wrote some code to try and extract the original functions for every udon EXTERN to try and reduce overhead there,
+> and then never got around to integrating it with the interpreter/jit.
+>
+> It may not have helped that our code was split between a bunch of branches that I wasn't quite sure how to unify, so I just kinda... put it off.
+> After all, it's not like there was any rush, right?
 
-Check out our code, [here](https://github.com/kitlith/vrc_udon_shit)
-
-Over time the progress has slowed as I've mostly stopped playing VRChat and only rarely played Mahjong and Kitlith (TODO?).
+At this point I've mostly stopped playing VRChat and only rarely played Mahjong.
 
 ## The end?
 On 2022.07.25, VRChat announced that they would ship the next version with Epic Games' "Easy Anti-Cheat". This would effectively prevent all of these efforts from ever working in-game again.
+
+You can check out our code, [here](https://github.com/kitlith/vrc_udon_shit)
