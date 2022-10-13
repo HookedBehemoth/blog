@@ -20,7 +20,7 @@ The table [Prefab](https://docs.unity3d.com/Manual/Prefabs.html) allows you to s
 Over time I got annoyed by the bad performance I had to endure while playing this game.
 
 ## About UDON
-Udon is an interpreted bytecode language for client-sided functionality in VRChat environments.
+Udon is an interpreted bytecode language for client-sided functionality in VRChat Worlds.
 Each script is bound to an object where one player implicitly or explicitly takes ownership.
 
 It consists of a fixed-size heap, a stack and nine variable-length instructions (4 or 8 bytes).
@@ -75,7 +75,7 @@ def func(lhs: Int32, rhs: Int32) -> Int32:
     lhs * rhs
 ```
 This one uses a limited python language subset. Function calls are easy here but come with their own issues.
-For example, `EXTERN` function signatures need to be manually updated, and python doesn't integrate well into the Unity Editor.
+For example, callable function signatures need to be manually updated, and python doesn't integrate well into the Unity Editor.
 
 [Source Code](https://github.com/zz-roba/UdonPieCompiler)
 
@@ -88,7 +88,7 @@ public class SpinningCubes : UdonSharpBehaviour {
 }
 ```
 Inspired by UdonPieCompiler, MerlinVR developed a C# compiler.
-Since traditional Unity scripting is done in this language, this is a well fit.
+Since traditional Unity scripting is done in this language, it fits well.
 In addition, most previous issues have been resolved, and even recursion is possible.
 
 Merlin is also well known for releasing various tools to help VRChat world creators like [USharpVideo](https://github.com/MerlinVR/USharpVideo), which uses UdonSharp.
@@ -109,7 +109,7 @@ Java's JVM currently has [203](https://en.wikipedia.org/wiki/List_of_Java_byteco
 Microsoft's CIL, used by C#, has [229](https://en.wikipedia.org/wiki/List_of_CIL_instructions).
 Your CPU runs on over a thousand different instructions.
 
-If you know how these instructions work, you might wonder how basic arithmetic operations function.
+If you know any assembly language, you might wonder how basic arithmetic operations in UDON work.
 
 ### EXTERN
 To get anything to happen, UDON code uses its sixth instruction to call into external functions. A simple float addition looks like this:
@@ -122,11 +122,11 @@ EXTERN "SystemSingle.__op_Addition__SystemSingle_SystemSingle__SystemSingle"
 
 This is **slow**. How slow? In my testing, running against the same C# code running in a mono runtime, **200 times** slower.
 This might not be an issue for UDON's intended use case, but the creative world moves on, and simple buttons and switches aren't the only things around.
-The Mahjong prefab we are using consists of over 6'000 lines of code and compiles to roughly 28'000 instructions. Of those, over 4'000 are "EXTERN" calls.
-
-{{ side_note(text="You could probably consider UDON harmful for the environment") }}
+The Mahjong prefab we are using consists of over 6'000 lines of code and compiles to roughly 28'000 instructions. Of those, over 4'000 are `EXTERN` calls.
 
 The slowdown caused by this is especially noticeable and irritating in VR.
+
+{{ side_note(text="You could probably consider UDON harmful for the environment") }}
 
 ## Part Two
 This second part of the post is about my work and is more subjective.
