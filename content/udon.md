@@ -4,7 +4,7 @@ date = 2022-10-10
 description = "A story about a horrible bytecode interpreter."
 +++
 
-Note: 
+Note:
 This is my first blog post, so be forgiving.
 
 ## Introduction
@@ -104,12 +104,12 @@ An honourable mention goes to Katsudon, which I haven't looked into enough.
 
 ## Slow down
 However, all these are compiled down to the assembly language mentioned above.
-Six instructions isn’t a lot compared to other Virtual Machines.
+Six instructions isn't a lot compared to other Virtual Machines.
 Java's JVM currently has [203](https://en.wikipedia.org/wiki/List_of_Java_bytecode_instructions).
 Microsoft's CIL, used by C#, has [229](https://en.wikipedia.org/wiki/List_of_CIL_instructions).
 Your CPU runs on over a thousand different instructions.
 
-If you are familiar with how any of these work, you might wonder how basic arithmetic operations function.
+If you know how these instructions work, you might wonder how basic arithmetic operations function.
 
 ### EXTERN
 To get anything to happen, UDON code uses its sixth instruction to call into external functions. A simple float addition looks like this:
@@ -154,15 +154,15 @@ This helped mitigate the stutter issues I had with the Mahjong CPU.
 
 The good:
 - 100% compatibility:
-This worked fine in all tested Worlds that integrated the table. Luckily, world creators never adjusted this portion, and if they had, nobody would notice.
+  This worked fine in all tested Worlds that integrated the table. Luckily, world creators never adjusted this portion, and if they had, nobody would notice.
 
 The bad:
 - limited to specific segments:
-Since I could only intervene before the VM spun up, I had very rough control over what code I could replace.
+  Since I could only intervene before the VM spun up, I had very rough control over what code I could replace.
 - careful patches:
-The original script had to change a lot to make it compatible.
+  The original script had to change a lot to make it compatible.
 - couldn't mitigate all slowdown:
-To preserve compatibility, I had to skip the first frame of the CPU's turn, and only 13/14 lags were mitigated.
+  To preserve compatibility, I had to skip the first frame of the CPU's turn, and only 13/14 lags were mitigated.
 
 ### Theseus ship
 2021.08.09
@@ -170,7 +170,7 @@ To preserve compatibility, I had to skip the first frame of the CPU's turn, and 
 
 The next battle strategy was to replace VM entirely.
 Calls to the VM would end up in native-run C# code.
-Luckily the UDON VM was implemented in a set of interfaces so I could setup a "fake" VM that implements this interface.
+Luckily VRChat implemented the UDON VM in a set of interfaces, so I could set up a "fake" VM that implements this interface.
 
 Sadly this didn't work immediately as our modding framework didn't support interfaces.
 
@@ -181,18 +181,18 @@ The default runtime is mono, a CIL interpreter and JIT.
 
 Unity also provides an alternative compiler and runtime called il2cpp.
 IL refers to the bytecode language C# compiles to.
-il2cpp takes this bytecode language and converts it to C++ code, which is then again compiled to native machine code.
+il2cpp takes this bytecode language and converts it to C++, which is then again compiled to native machine code.
 
 This allows Unity games to run on platforms where JIT compilation isn't allowed, and interpreting is too slow.
 Another side effect is that the game becomes significantly harder to mod or reverse engineer.
 
 In early 2020 VRChat switched to il2cpp, probably because of this exact side effect.
-With this change, modding, which previously injected CIL DLL's into the mono runtime, was on hold.
-Eventually a solution was developed that could make old mods work again with only minor adjustments.
+With this change, modding, which previously injected CIL DLLs into the mono runtime, was on hold.
+Eventually, LavaGang developed a solution to make old mods work again with only minor adjustments.
 It consists of [MelonLoader](https://github.com/LavaGang/MelonLoader), which provides the known mono runtime, and [Il2CppAssemblyUnhollower](https://github.com/knah/Il2CppAssemblyUnhollower), which provides all the glue to work with the entirely different environment.
 
-Through Il2CppAssemblyUnhollower it's possible to inject your CIL classes that are accessible from the il2cpp side.
-The short commings I had to face were in it's "ClassInjector", which I solved by forwarding information about implemented interfaces.
+Through Il2CppAssemblyUnhollower, it's possible to inject your CIL classes that are accessible from the il2cpp side.
+The shortcomings I had to face were in its "ClassInjector", which I solved by forwarding information about implemented interfaces.
 Missing still were generic methods on interfaces, which UDON used for accessing heap variables.
 
 #### Generic Virtual
@@ -200,25 +200,25 @@ Looking into this made me curious.
 Say you have a function `GetValue<T>()` on an interface `I`.
 You might have multiple classes implementing `I` and multiple calls to `I::GetValue<T>()` with `T` being various types.
 
-How does an ahead-of-time compiler know what code he should emit.
+How does an ahead-of-time compiler know what code he should emit?
 The solution il2cpp chose was to stamp out code for every possible combination of `I` and `T`, resulting in a gigantic pile of potentially unused code.
 Lookups are done once at runtime and cached for performance reasons.
 
-While the il2cpp compiler is proprietary, it's runtime library is provided by the Unity Editor, as games have to link against it.
-Tracing down the callstack I found a good place to hook into.
-Now when a generic method on an interface is first called, it will search through my injected classes and return those.
+While the il2cpp compiler is proprietary, the Unity Editor provides its runtime library, as games have to link against it.
+Tracing down the callstack, I found a good place to hook into.
+When a generic method on an interface is first called, it will search through my injected classes and return those.
 Since we live in CIL mono, we can stamp out the needed functions at runtime.
 
 You can find my patch to Il2CppAssemblyUnhollower [here](https://github.com/knah/Il2CppAssemblyUnhollower/pull/71)
 
-Now this I could finally hook up my own "fake" VM like so:
+Now I could finally hook up my own "fake" VM like so:
 ```cs
 RegisterTypeInIl2CppWithInterfaces<FakeUdon.FakeUdonProgram>(true, typeof(IUdonProgram));
 RegisterTypeInIl2CppWithInterfaces<FakeUdon.FakeUdonVM>(true, typeof(IUdonVM));
 RegisterTypeInIl2CppWithInterfaces<FakeUdon.FakeUdonHeap>(true, typeof(IUdonHeap));
 ```
 
-With this, no further changes to the Mahjong script had to be done.
+With this, no further changes to the Mahjong script had to be made.
 See for yourself:
 
 {{ video(path="/blog/udon/fast.webm", poster="/blog/udon/fast.jpg") }}
@@ -229,7 +229,7 @@ The good:
 - Massive Speedup:
 The Mahjong table execution is sped up by **factor 200**
 - Generally applicable:
-Adding new scripts requires no changes to the code
+Adding new scripts requires no changes to the code.
 
 The bad:
 - Huge initial effort: The initial investment was large
@@ -242,14 +242,14 @@ I published all the glue code as a library in November 2021 [here](https://githu
 At the end of December, I got messaged by Kitlith, who found the repository and was interested in speeding up Udon overall.
 He started recreating the VM in C# but could only get ~80% of the speed of the original code.
 
-Through [Advent of Code](https://adventofcode.com/), I had recently learned Rust which I used to write an [interpreter](https://github.com/kitlith/vrc_udon_shit/blob/target-codegen/native/src/vm/interpreter.rs). Without any special optimization, it immediately surpassed the original VM by 5-15%. In one particular benchmark, (after applying some minor optimizations) it was 30% faster.
+Through [Advent of Code](https://adventofcode.com/), I had recently learned Rust which I used to write an [interpreter](https://github.com/kitlith/vrc_udon_shit/blob/target-codegen/native/src/vm/interpreter.rs). Without any special optimization, it immediately surpassed the original VM by 5-15%. One particular benchmark (after applying some minor optimizations) was 30% faster.
 
 > Hey, I'm Kitlith. My original goal with C# was to emit .net bytecode and let the JIT built into .NET optimize it for us.
 > I dove into the guts of mod<->game interaction to gain as much performance as possible, and was in the middle of
 > reimplementing the UdonHeap when I got blindsided by
 > Behemoth's rust interpreter executing the benchmark we were using *faster* than just the time spent by my C# interpreter
 > calling Udon EXTERNs. On the one hand, I was relieved, as that was a pile of hacks that was not going to be trivial to
-> maintain, and I liked rust anyway. On the other, there was now a new codebase that it took some time to get up to speed with.
+> maintain, and I liked Rust anyway. On the other, there was now a new codebase that it took some time to get up to speed with.
 >
 > The original C# code is still around, kept in the [original branch](https://github.com/kitlith/vrc_udon_shit/tree/master)
 > if you're interested in it, but it's not very useful.
@@ -282,9 +282,9 @@ The next attempt was to write a JIT compiler that converts UDON assembly into x8
 > It may not have helped that our code was split between a bunch of branches that I wasn't quite sure how to unify, so I just kinda... put it off.
 > After all, it's not like there was any rush, right?
 
-At this point I've mostly stopped playing VRChat and only rarely played Mahjong.
+At this point, I've mostly stopped playing VRChat and only rarely played Mahjong.
 
 ## The end?
 On 2022.07.25, VRChat announced that they would ship the next version with Epic Games' "Easy Anti-Cheat". This would effectively prevent all of these efforts from ever working in-game again.
 
-You can check out our code, [here](https://github.com/kitlith/vrc_udon_shit)
+You can check out our code [here](https://github.com/kitlith/vrc_udon_shit)
