@@ -31,7 +31,7 @@ These are as follows:
 | NOP | Nothing |
 | PUSH | Pushes a heap index to the stack |
 | POP | Removes the last index from the stack |
-| JUMP_IF_FALSE | Jumps to a set instruction if the last value on the stack evaluates to true |
+| JUMP_IF_FALSE | Jumps to a set instruction if the last value on the stack evaluates to false |
 | JUMP | Jump to a set instruction |
 | EXTERN | Call an exported function outside the VM |
 | ANNOTATION | Prints a variable of the heap |
