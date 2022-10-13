@@ -288,3 +288,5 @@ At this point, I've mostly stopped playing VRChat and only rarely played Mahjong
 On 2022.07.25, VRChat announced that they would ship the next version with Epic Games' "Easy Anti-Cheat". This would effectively prevent all of these efforts from ever working in-game again.
 
 You can check out our code [here](https://github.com/kitlith/vrc_udon_shit)
+
+> Special thanks to [float3](https://github.com/float3) for proofreading and spell checking this post.
