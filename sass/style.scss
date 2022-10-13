@@ -41,7 +41,9 @@ pre {
 }
 
 p code {
-    background-color: #333;
+    background-color: var(--bg_note);
+    border-radius: 7px;
+    padding: 0px 5px;
 }
 
 p {
@@ -93,7 +95,7 @@ img {
         flex-shrink: 0;
     }
     div {
-        background-color: #333;
+        background-color: var(--bg_note);
         border-radius: 12px;
         border:1px solid var(--accent);
         font-size: 1em;
