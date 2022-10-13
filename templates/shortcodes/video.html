@@ -1,1 +1,2 @@
-<video src="{{url}}" width="{{width}}" height="{{height}}" controls="" preload="none"></video>
+{% set meta = get_image_metadata(path=poster) %}
+<video src="{{ path }}" width="{{ meta.width }}" height="{{ meta.height }}" controls="" preload="none" poster="{{ poster }}"></video>

@@ -1,0 +1,2 @@
+ffmpeg -i ~/Videos/2021-08-10\ 23-38-45.mp4 -vf scale=640:360 -c:v libvpx-vp9 -b:v 256K -pass 1 -an -f null /dev/null
+ffmpeg -i ~/Videos/2021-08-10\ 23-38-45.mp4 -vf scale=640:360 -c:v libvpx-vp9 -b:v 256K -pass 2 -c:a libopus -movflags faststart static/blog/udon/fast.vp9.webm
