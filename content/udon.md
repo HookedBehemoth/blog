@@ -290,3 +290,6 @@ On 2022.07.25, VRChat announced that they would ship the next version with Epic 
 You can check out our code [here](https://github.com/kitlith/vrc_udon_shit)
 
 > Special thanks to [float3](https://github.com/float3) for proofreading and spell checking this post.
+
+## Update (December 2022)
+VRChat announced in one of their recent blog posts ["Udon 2"](https://ask.vrchat.com/t/developer-update-15-december-2022/15518#udon-2-working-title-13). They will transition to a WASM VM.
