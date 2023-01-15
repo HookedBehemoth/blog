@@ -55,7 +55,7 @@ loop {
 Since you wouldn't want to write assembly directly, you can choose higher-level languages and compilers.
 
 ### Node Graphs
-{{ image(path="/blog/udon/graph.png") }}
+{{ image(path="/blog/udon/graph.png", alt="Udon Node Graph screenshot") }}
 
 The VRChat team made this one.
 Unfortunately, it's still very limited.
