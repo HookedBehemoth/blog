@@ -1,10 +1,4 @@
 // colors
-$bg_color: #0F0F0F;
-$bg_panel: #161616;
-$fg_color: #F8F8F2;
-$fg_faded: #F8F8F2CF;
-$accent: #FF6C60;
-
 @media (prefers-color-scheme : dark) {
     body {
         --bg_color: #0F0F0F;
@@ -30,7 +24,5 @@ $accent: #FF6C60;
 $page-width: 900px;
 
 //fonts
-$font_0: Helvetica Neue;
-$font_1: Helvetica;
-$font_2: Arial;
-$font_3: sans-serif;
+$font_0: "noto serif";
+$font_1: serif;

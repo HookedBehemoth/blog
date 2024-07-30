@@ -5,16 +5,17 @@
 {% endblock %}
 
 {% block content %}
+<a class="float" href="/atom.xml"><img src="/icons/rss.svg" width="20px" alt="RSS Feed"></a>
 <h1 class="title">
-  {{ section.title }}
+	{{ section.title }}
 </h1>
 <ul>
-  {% for page in section.pages %}
-  <li>
-    <a href="{{ page.path }}">{{ page.title }}</a>
-    <p>{{ page.date }}</p>
-    <p>{{ page.description }}</p>
-  </li>
-  {% endfor %}
-</ul>
+	{% for page in section.pages %}
+	<li>
+		<a href="{{ page.path }}">{{ page.title }}</a>
+		<p>{{ page.date }}</p>
+		<p>{{ page.description }}</p>
+	</li>
+	{% endfor %}
+	</ul>
 {% endblock content %}

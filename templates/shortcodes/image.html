@@ -1,6 +1,8 @@
 {% set meta = get_image_metadata(path=path) %}
 <picture>
-    <source srcset="{{ path }}.avif" type="image/avif" />
-    <source srcset="{{ path }}.webp" type="image/webp" />
-    <img src="{{ path }}" width="{{ meta.width }}" height="{{ meta.height }}" loading="lazy" alt="{{ alt }}" />
+	<!--
+	<source srcset="{{ path }}.avif" type="image/avif" />
+	<source srcset="{{ path }}.webp" type="image/webp" />
+	-->
+	<img src="{{ path }}" width="{{ meta.width }}" height="{{ meta.height }}" loading="lazy" alt="{{ alt }}" />
 </picture>

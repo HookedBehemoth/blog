@@ -1,0 +1,5 @@
+{% set mdata = get_image_metadata(path=path) %}
+{% set image = resize_image(path=path, width=width, op="fit_width") %}
+<a href="{{ path }}">
+	<img src="{{ image.url }}" />
+</a>

@@ -3,8 +3,9 @@
 body {
     background: var(--bg_color);
     color: var(--fg_color);
-    font-family: $font_0, $font_1, $font_2, $font_3;
-    font-size: 18px;
+    font-family: $font_0, $font_1;
+    font-size: 20px;
+	word-wrap: break-word;
     margin: 0;
 }
 
@@ -16,6 +17,19 @@ main {
     margin: 1em auto;
     border-radius: 20px;
     box-shadow: 0 0 1em rgba(0, 0, 0, 0.2);
+}
+
+footer {
+	text-align: center;
+	font-size: 14px;
+	margin: 10px;
+	a {
+		color: var(--fg_faded)
+	}
+}
+
+.float {
+	float: right;
 }
 
 .subtitle {
@@ -58,6 +72,10 @@ a {
     &:focus {
         text-decoration: underline;
     }
+}
+
+h1 {
+	margin-top: auto;
 }
 
 h1,

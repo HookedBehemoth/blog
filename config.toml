@@ -1,13 +1,28 @@
 base_url = "https://boxcat.site"
+
+title = "HookedBehemoth's Blog"
+description = "A (hopefully) mainly technical blog"
+
 compile_sass = true
-build_search_index = false
-minify_html = true
-generate_feed = true
+minify_html = false
+generate_feeds = true
 hard_link_static = false
+build_search_index = false
 
 [markdown]
 highlight_code = true
 render_emoji = true
 smart_punctuation = true
+
+[link_checker]
+skip_anchor_prefixes = [
+    "https://github.com/",
+]
+
+internal_level = "error"
+external_level = "warn"
+
+[slugify]
+paths_keep_dates = true
 
 [extra]
