@@ -83,3 +83,29 @@ WHERE
 
 I expect maintenance to be lower than the array solution suggested in Josh Berkus' article about the same thing [https://www.databasesoup.com/2015/01/tag-all-things.html](https://www.databasesoup.com/2015/01/tag-all-things.html) but that remains to be seen.
 I'll now move the rest of my program over to psql and clean up the artifacts of the failed optimization strategies.
+
+# GIN
+
+As descibed by Josh, inverted indices are a good fit for this too.
+They make writing the query even compacter.
+```sql
+CREATE INDEX entry_tags_id_tags_gin
+ON entry_tag_names
+USING gin (tag_names);
+```
+Using them in queries doesn't require joining another table but allow for the following syntax.
+```sql
+WHERE
+    tag_names @> ARRAY['test', 'beta']
+  AND NOT (tag_names && ARRAY['alpha']);
+```
+We are now down to ~170ms on our select and ~65ms on the count.
+Having to refresh our materialized view doesn't seem ideal though.
+
+In the end I've moved away from the materialized view and to an equivalent table and adding the GIN to that.
+Without all the indices that I've needed before the database is now down to <700MB with the tag table taking up half of it and it's index ~70MB.
+
+# Further Profiling
+A few red herrings presented itself along the way.
+Just now I've found that a potentially unused join in my count query slowed down the entire query needlessly.
+Running the entire program in release resolved this and I've now enabled `opt-level = 1` for debug and `opt-level = 3` for all dependencies.

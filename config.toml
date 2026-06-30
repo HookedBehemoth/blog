@@ -10,9 +10,13 @@ hard_link_static = false
 build_search_index = false
 
 [markdown]
-highlight_code = true
 render_emoji = true
 smart_punctuation = true
+
+[markdown.highlighting]
+error_on_missing_language = false
+style = "inline"
+theme = "catppuccin-frappe"
 
 [link_checker]
 skip_anchor_prefixes = [

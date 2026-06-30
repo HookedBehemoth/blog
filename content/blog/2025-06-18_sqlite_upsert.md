@@ -55,3 +55,5 @@ We can choose to ignore updates if only unimportant columns are updated.
 
 This assumes that you switch between entities.
 If you keep checking the same entity, `last_insert_rowid()` will keep returning the same rowid.
+
+I've switched to postgres for this endavor and as pointed out on [Stackoverflow](https://stackoverflow.com/questions/39058213/differentiate-inserted-and-updated-rows-in-upsert-using-system-columns), there you can use `(xmax != 0) to the same effect.
